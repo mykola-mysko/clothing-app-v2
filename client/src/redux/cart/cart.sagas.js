@@ -1,0 +1,19 @@
+import { all, takeLatest, call, put } from 'redux-saga/effects';
+
+import UserActionTypes from '../user/user.types';
+import { clearCart } from './cart.actions';
+
+// worker
+export function* clearCartOnSignOut() {
+	yield put(clearCart());
+}
+
+// watcher
+export function* onSignOutSuccess() {
+	yield takeLatest(UserActionTypes.SIGN_OUT_SUCCESS, clearCartOnSignOut);
+}
+
+// export to root saga
+export function* cartSagas() {
+	yield all([call(onSignOutSuccess)]);
+}
